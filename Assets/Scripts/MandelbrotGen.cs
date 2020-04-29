@@ -1,17 +1,18 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Net.NetworkInformation;
-using System;
+﻿using System;
 using UnityEngine;
 
+//Not exactly a MandelBrot Generator but who cares
 public class MandelbrotGen : MonoBehaviour
 {
+    [Header("GameObject Points")]
     [SerializeField] GameObject initialPoint;
     [SerializeField] GameObject constantPoint;
+
+    [Header("Options")]
     [SerializeField] int iterations = 5;
     [SerializeField] float _THRESHOLD = 10;
 
-    LineRenderer line;
+    private LineRenderer line;
     
 
     void Start()
@@ -22,8 +23,26 @@ public class MandelbrotGen : MonoBehaviour
         GenerateSequence();
     }
 
+
+    private Vector3 ComplexPow2(Vector3 point)
+    {
+        Vector3 result;
+        result.x = point.x * point.x - point.y * point.y;
+        result.y = 2 * point.x * point.y;
+        result.z = point.z;
+
+        if (Mathf.Abs(point.x) > _THRESHOLD || Mathf.Abs(point.y) > _THRESHOLD)
+        {
+            throw new Exception("Threshold reached");
+        }
+        return result;
+    }
+
     public void GenerateSequence()
     {
+        if (!line.enabled)
+           line.enabled = true;
+
         line.SetPosition(0, initialPoint.transform.position);
         Vector3 point = initialPoint.transform.position;
         Vector3 constant = constantPoint.transform.position;
@@ -45,18 +64,8 @@ public class MandelbrotGen : MonoBehaviour
         }
     }
 
-    private Vector3 ComplexPow2(Vector3 point)
+    public void SetLineRenderer(bool status)
     {
-        Vector3 result;
-        result.x = point.x * point.x - point.y * point.y;
-        result.y = 2 * point.x * point.y;
-        result.z = point.z;
-
-        if(Mathf.Abs(point.x) > _THRESHOLD || Mathf.Abs(point.y) > _THRESHOLD)
-        {
-            throw new Exception("Threshold reached");
-        }
-            return result;
+        line.enabled = status;
     }
-
 }

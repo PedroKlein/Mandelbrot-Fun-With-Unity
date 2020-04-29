@@ -20,6 +20,8 @@
 
             #include "UnityCG.cginc"
 
+            #define B 32.
+
             struct appdata
             {
                 float4 vertex : POSITION;
@@ -40,36 +42,30 @@
                 return float2(a.x*a.x - a.y*a.y, 2*a.x*a.y);
             }
 
-            float3 GenMandelbrot(float2 xy) {
-                float2 c = float2(_CPos.x, _CPos.y);
-                for (int i = 0; i < _Iteretions; i++) {
-                    float2 z = ComplexPow2(xy) + c;
-                    float zdot = dot(z,z);
-                    if (zdot > 100000.0){
-                        float sl = float(i) - log2(log2(zdot));
-			            return sl/float(_Iteretions);
-                    }                
-                }
-                return 0.0; // in set
+            float3 pal(in float t, in float3 a, in float3 b, in float3 c, in float3 d) {
+                return a + b * cos(6.28318 * (c * t + d));
             }
+
+            float GenJuliaSet(float2 z) {
+                float2 c = float2(_CPos.x, _CPos.y);
+                float zdot;
+                int i;
+                for (i = 0; i < _Iteretions; i++) {
+                    z = ComplexPow2(z) + c;
+                    zdot = dot(z, z);
+                    if (zdot > B*B)
+                        break;
+                }
+                float sl = float(i) - log(log(zdot) / log(B)) / log(2.);
+                return sl / float(_Iteretions);
+            }
+
+            
 
             float4 mapColor(float mcol) {
-                return float4(0.5 + 0.5 * cos(2.7 + mcol * 30.0 + float3(0.0, .6, 1.0)), 1.0);
+                return float4(0.5 + 0.5 * cos(0.7 + mcol * 1.0 + float3(0.0, .6, .2)), 1.0);
             }
 
-            /*
-            float2 Zoom(float scrollValue, float2 uv) {
-                float2 mouse = float2(_xMousePos, _yMousePos);
-                mouse = mouse != 0 ? (mouse - 0.5) * 4: 0;
-                //mouse /= scrollValue;
-
-                uv /= scrollValue;
-                uv += mouse;
-
-                float2 delta = mouse !=0 ? (mouse - uv): 0;
-                return uv - delta;
-            }
-            */
             v2f vert (appdata v)
             {
                 v2f o;
@@ -82,8 +78,9 @@
             fixed4 frag(v2f i) : SV_Target
             {
                 float2 c = _Area.xy + ((i.uv - 0.5)) * _Area.zw;
-                fixed4 col = float4(GenMandelbrot(c), 0);
-                return mapColor(col);
+                float res = GenJuliaSet(c);
+                float3 col = pal(frac(2. * res + 0.5), float3(.5,.5,.5), float3(.5, .5, .5), float3(1, 1, 1), float3(.0, .10, .2));
+                return float4(col, 1);
             }
             ENDCG
         }

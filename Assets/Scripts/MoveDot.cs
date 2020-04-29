@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine;
 
 public class MoveDot : MonoBehaviour
 {
@@ -9,8 +6,8 @@ public class MoveDot : MonoBehaviour
     [SerializeField] bool isZ = false;
 
     private bool selected;
-    MandelbrotGen mandelbrot;
-    ApplyShader applyShader;
+    private MandelbrotGen mandelbrot;
+    private ApplyShader applyShader;
 
     void Start()
     {
@@ -21,20 +18,31 @@ public class MoveDot : MonoBehaviour
     void Update()
     {
         if (selected)
-        {     
+        {
             Vector2 cursorPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            transform.position = cursorPos;           
-            mandelbrot.GenerateSequence();
+            transform.position = cursorPos;
+
             if (Input.GetMouseButtonUp(0))
             {
                 selected = false;
             }
 
-            if (applyShader.GetShaderStatus() && isZ)
-            {
+            CheckAndUpdateOption();
+        }
+    }
+
+    private void CheckAndUpdateOption()
+    {
+        if (applyShader.GetShaderStatus())
+        {
+            if (isZ)
                 applyShader.SetZPosition(transform.position);
-            }
-        }      
+            else
+                applyShader.SetCPosition(transform.position);
+        }
+        else
+            mandelbrot.GenerateSequence();
+            
     }
 
     private void OnMouseOver()
@@ -48,11 +56,8 @@ public class MoveDot : MonoBehaviour
     public void ResetPosition()
     {
         transform.position = new Vector3(0,0,0);
-        mandelbrot.GenerateSequence();
-        if (applyShader.GetShaderStatus() && isZ)
-        {
-            applyShader.SetZPosition(transform.position);
-        }
+
+        CheckAndUpdateOption();
     }
 
 }

@@ -54,7 +54,7 @@
             }
 
             float4 mapColor(float mcol) {
-                return float4(0.5 + 0.5 * cos(2.7 + mcol * 30.0 + float3(0.0, .6, 1.0)), 1.0);
+                return float4(0.5 + 0.5 * cos(2.7 + mcol * 100.0 + float3(0.0, .6, 1.0)), 1.0);
             }
 
             /*

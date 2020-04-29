@@ -1,25 +1,33 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
-[ExecuteInEditMode]
 public class ApplyShader : MonoBehaviour
 {
-    [SerializeField] Material material;
-    [SerializeField] bool applyShader = false;
+    [Header("Materials")]
+    [SerializeField] Material mandelbrotMaterial;
+    [SerializeField] Material juliaSetMaterial;
 
+    [Header("Options")]
     [SerializeField] Vector2 position = new Vector2(0,0);
     [SerializeField] float scale = 4;
 
     private Vector2 smoothPosition;
     private float smoothScale;
+
     private RawImage image;
+    private Material material;
+
+    private MeshRenderer meshSphere;
+    private MandelbrotGen mandelbrotGen;
+    private enum Options { ImaginaryPlane, MandelbrotSet, JuliaSet};
 
     private void Start()
     {
+        material = mandelbrotMaterial;
+
+        mandelbrotGen = FindObjectOfType <MandelbrotGen>();
+        meshSphere = FindObjectOfType<MeshRenderer>();
         image = GetComponent<RawImage>();
-        ToggleShader(applyShader);
     }
     private void FixedUpdate()
     {
@@ -66,9 +74,36 @@ public class ApplyShader : MonoBehaviour
             position.y += .01f * scale;
     }
 
-    public void ToggleShader(bool toggle)
+    public void UpdateOptions(int option)
     {
-        image.enabled = toggle;
+
+        switch (option)
+        {
+            case (int)Options.ImaginaryPlane:
+
+                mandelbrotGen.SetLineRenderer(true);
+                meshSphere.enabled = true;
+                image.enabled = false;
+                break;
+            case (int)Options.MandelbrotSet:
+
+                mandelbrotGen.SetLineRenderer(false);
+                meshSphere.enabled = false;
+                image.enabled = true;
+                image.material = mandelbrotMaterial;
+                material = mandelbrotMaterial;            
+                break;
+            case (int)Options.JuliaSet:
+
+                mandelbrotGen.SetLineRenderer(false);
+                meshSphere.enabled = false;
+                image.enabled = true;
+                image.material = juliaSetMaterial;
+                material = juliaSetMaterial;
+                break;
+            default:
+                break;
+        }
     }
 
     public bool GetShaderStatus()
@@ -78,7 +113,14 @@ public class ApplyShader : MonoBehaviour
 
     public void SetZPosition(Vector2 pos)
     {
-        material.SetVector("_ZPos", new Vector4(pos.x, pos.y, 0, 0));
+        if(material.Equals(mandelbrotMaterial))
+            material.SetVector("_ZPos", new Vector4(pos.x, pos.y, 0, 0));
+    }
+
+    public void SetCPosition(Vector2 pos)
+    {
+        if(material.Equals(juliaSetMaterial))
+            material.SetVector("_CPos", new Vector4(pos.x, pos.y, 0, 0));
     }
 }
     

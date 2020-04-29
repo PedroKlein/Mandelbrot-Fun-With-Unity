@@ -28,7 +28,7 @@ RectTransform:
   m_GameObject: {fileID: 6172078857263841692}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 9088535892666061547}
   m_Father: {fileID: 0}
@@ -48,7 +48,7 @@ Canvas:
   m_GameObject: {fileID: 6172078857263841692}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
+  m_RenderMode: 2
   m_Camera: {fileID: 0}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
@@ -112,7 +112,7 @@ GameObject:
   - component: {fileID: 9088535892666061541}
   - component: {fileID: 9088535892666061546}
   m_Layer: 5
-  m_Name: Mandelbrot
+  m_Name: Apply Shader
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -134,8 +134,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.000030517578, y: -0.000015258789}
-  m_SizeDelta: {x: 0, y: 0.000030517578}
+  m_AnchoredPosition: {x: -0.0035705566, y: 0.0014395714}
+  m_SizeDelta: {x: -0.0018790588, y: 0.0014291108}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &9088535892666061540
 CanvasRenderer:
@@ -183,7 +183,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a49a6df13c871474fb976d1d680eada9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  material: {fileID: 2100000, guid: 5349ef0b1c8803e4b8b32b8e7f6031a8, type: 2}
-  applyShader: 0
+  mandelbrotMaterial: {fileID: 2100000, guid: 5349ef0b1c8803e4b8b32b8e7f6031a8, type: 2}
+  juliaSetMaterial: {fileID: 2100000, guid: 626df53d462f69646bbf49bfb7c59ee6, type: 2}
   position: {x: 0, y: 0}
   scale: 4

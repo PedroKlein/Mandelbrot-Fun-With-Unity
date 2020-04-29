@@ -156,3 +156,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68198a828813bc0468b82a624a4a4919, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mandelbrotMat: {fileID: 0}
+  isZ: 0

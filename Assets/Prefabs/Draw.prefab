@@ -46,8 +46,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   initialPoint: {fileID: 0}
   constantPoint: {fileID: 0}
-  iterations: 10
-  _THRESHOLD: 1000
+  iterations: 30
+  _THRESHOLD: 100
 --- !u!120 &5584008708822754929
 LineRenderer:
   m_ObjectHideFlags: 0
