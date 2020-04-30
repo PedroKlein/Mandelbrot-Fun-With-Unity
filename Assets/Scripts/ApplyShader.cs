@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using TMPro;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class ApplyShader : MonoBehaviour
@@ -17,21 +18,19 @@ public class ApplyShader : MonoBehaviour
     private RawImage image;
     private Material material;
 
-    private MeshRenderer meshSphere;
-    private MandelbrotGen mandelbrotGen;
+    private bool isInputOn = false;
     private enum Options { ImaginaryPlane, MandelbrotSet, JuliaSet};
 
     private void Start()
     {
         material = mandelbrotMaterial;
 
-        mandelbrotGen = FindObjectOfType <MandelbrotGen>();
-        meshSphere = FindObjectOfType<MeshRenderer>();
         image = GetComponent<RawImage>();
     }
     private void FixedUpdate()
     {
-        HandleInput();
+        if(isInputOn)
+            HandleInput();
         UpdateShader();
     }
 
@@ -74,41 +73,36 @@ public class ApplyShader : MonoBehaviour
             position.y += .01f * scale;
     }
 
-    public void UpdateOptions(int option)
+    public void SetInputs(bool status)
     {
+        isInputOn = status;
+    }
 
-        switch (option)
-        {
-            case (int)Options.ImaginaryPlane:
+    public void SetShader(bool status)
+    {
+        image.enabled = status;
+    }
 
-                mandelbrotGen.SetLineRenderer(true);
-                meshSphere.enabled = true;
-                image.enabled = false;
-                break;
-            case (int)Options.MandelbrotSet:
+    public void SetJuliaSetMode()
+    {
+        image.material = juliaSetMaterial;
+        material = juliaSetMaterial;
+    }
 
-                mandelbrotGen.SetLineRenderer(false);
-                meshSphere.enabled = false;
-                image.enabled = true;
-                image.material = mandelbrotMaterial;
-                material = mandelbrotMaterial;            
-                break;
-            case (int)Options.JuliaSet:
-
-                mandelbrotGen.SetLineRenderer(false);
-                meshSphere.enabled = false;
-                image.enabled = true;
-                image.material = juliaSetMaterial;
-                material = juliaSetMaterial;
-                break;
-            default:
-                break;
-        }
+    public void SetMandelbrotMode()
+    {
+        image.material = mandelbrotMaterial;
+        material = mandelbrotMaterial;
     }
 
     public bool GetShaderStatus()
     {
         return image.enabled;
+    }
+
+    public void SetShaderIterations(int iterations)
+    {
+        material.SetInt("_Iteretions", iterations);
     }
 
     public void SetZPosition(Vector2 pos)
@@ -121,6 +115,12 @@ public class ApplyShader : MonoBehaviour
     {
         if(material.Equals(juliaSetMaterial))
             material.SetVector("_CPos", new Vector4(pos.x, pos.y, 0, 0));
+    }
+
+    public void ResetPosAndZoom()
+    {
+        position = new Vector2(0, 0);
+        scale = 4;
     }
 }
     

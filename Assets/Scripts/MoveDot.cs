@@ -33,15 +33,12 @@ public class MoveDot : MonoBehaviour
 
     private void CheckAndUpdateOption()
     {
-        if (applyShader.GetShaderStatus())
-        {
-            if (isZ)
-                applyShader.SetZPosition(transform.position);
-            else
-                applyShader.SetCPosition(transform.position);
-        }
+        mandelbrot.GenerateSequence();
+
+        if (isZ)
+            applyShader.SetZPosition(transform.position);
         else
-            mandelbrot.GenerateSequence();
+            applyShader.SetCPosition(transform.position);         
             
     }
 
@@ -51,6 +48,13 @@ public class MoveDot : MonoBehaviour
         {
             selected = true;
         }
+    }
+
+    public void SetPosition(Vector3 position)
+    {
+        transform.position = position;
+
+        CheckAndUpdateOption();
     }
 
     public void ResetPosition()

@@ -68,7 +68,7 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
-    - _Iteretions: 100
+    - _Iteretions: 512
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
@@ -86,7 +86,7 @@ Material:
     - _UseUIAlphaClip: 0
     - _ZWrite: 1
     m_Colors:
-    - _Area: {r: 0, g: 0, b: 7.107139, a: 3.9999979}
+    - _Area: {r: 1.3e-44, g: 1.3e-44, b: 3.9999979, a: 3.9999979}
     - _CPos: {r: 0, g: 0, b: 0, a: 0}
     - _Color: {r: 0.7169812, g: 0.7169812, b: 0.7169812, a: 0.5372549}
     - _ConstantPos: {r: -0.8767909, g: 0.7306591, b: 0, a: 0}

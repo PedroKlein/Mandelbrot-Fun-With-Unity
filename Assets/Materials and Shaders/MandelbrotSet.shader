@@ -36,25 +36,27 @@
             vector _Area;
             vector _ZPos;
 
-            float2 ComplexPow2(float2 a) {
+            float2 complexPow2(float2 a) {
                 return float2(a.x*a.x - a.y*a.y, 2*a.x*a.y);
             }
 
-            float3 GenMandelbrot(float2 xy) {
+            float3 genMandelbrot(float2 xy) {
                 float2 z = float2(_ZPos.x, _ZPos.y);
                 for (int i = 0; i < _Iteretions; i++) {
-                    z = ComplexPow2(z) + xy;
-                    float zdot = dot(z,z);
-                    if (zdot > 100000.0){
-                        float sl = float(i) - log2(log2(zdot));
-			            return sl/float(_Iteretions);
-                    }                
+                    z = complexPow2(z) + xy;
+                    float zdot = dot(z, z);
+                    if (zdot > (_Iteretions +1) * (_Iteretions + 1)) {
+                        float sl = i - log2(log2(dot(z, z))) + 4.0;
+                        float al = smoothstep(-0.1, 0.0, sin(0.5 * 6.2831));
+                        return lerp(i, sl, al);
+                    }
                 }
-                return 0.0; // in set
+                return 0;
             }
 
-            float4 mapColor(float mcol) {
-                return float4(0.5 + 0.5 * cos(2.7 + mcol * 100.0 + float3(0.0, .6, 1.0)), 1.0);
+            float3 mapColor(float l) {
+                float3 res = 0.5 + 0.5 * cos(3.0 + l * 0.15 + float3(0.0, 0.6, 1.0));
+                return res;
             }
 
             /*
@@ -82,8 +84,12 @@
             fixed4 frag(v2f i) : SV_Target
             {
                 float2 c = _Area.xy + ((i.uv - 0.5)) * _Area.zw;
-                fixed4 col = float4(GenMandelbrot(c), 0);
-                return mapColor(col);
+                float res = genMandelbrot(c);
+                if (res == 0) {
+                    return float4(0,0,0, 1);
+                }
+                float3 col = mapColor(res);
+                return float4(col, 1);
             }
             ENDCG
         }
