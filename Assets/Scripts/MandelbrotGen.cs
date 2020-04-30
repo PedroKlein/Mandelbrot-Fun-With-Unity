@@ -40,9 +40,6 @@ public class MandelbrotGen : MonoBehaviour
 
     public void GenerateSequence()
     {
-        if (!line.enabled)
-           line.enabled = true;
-
         line.SetPosition(0, initialPoint.transform.position);
         Vector3 point = initialPoint.transform.position;
         Vector3 constant = constantPoint.transform.position;
@@ -64,8 +61,10 @@ public class MandelbrotGen : MonoBehaviour
         }
     }
 
-    public void SetLineRenderer(bool status)
+    public void SetIteration(int value)
     {
-        line.enabled = status;
+        iterations = value;
+        line.positionCount = iterations + 1;
+        GenerateSequence();
     }
 }
